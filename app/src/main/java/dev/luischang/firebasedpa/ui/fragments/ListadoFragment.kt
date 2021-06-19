@@ -32,6 +32,7 @@ class ListadoFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
 
         val lstCourses : ArrayList<CourseModel> = ArrayList()
+        val rvCourse: RecyclerView = view.findViewById(R.id.rvCourse)
         db.collection("courses")
             .addSnapshotListener {snapshots, e->
 
@@ -47,20 +48,22 @@ class ListadoFragment : Fragment() {
                             //textView2.text(dc.document.data["description"].toString())
                             //textView2.text("asdasd")
                             lstCourses.add(CourseModel(dc.document.data["description"].toString(),dc.document.data["score"].toString()))
+                            rvCourse.adapter = CourseAdapter(lstCourses)
                         }
                         DocumentChange.Type.MODIFIED ->{
                             lstCourses.add(CourseModel(dc.document.data["description"].toString(),dc.document.data["score"].toString()))
+                            rvCourse.adapter = CourseAdapter(lstCourses)
 
                         }
                         DocumentChange.Type.REMOVED ->{
-                            lstCourses.add(CourseModel(dc.document.data["description"].toString(),dc.document.data["score"].toString()))
+                            //lstCourses.add(CourseModel(dc.document.data["description"].toString(),dc.document.data["score"].toString()))
 
                         }
 
                     }
                 }
-                val rvCourse: RecyclerView = view.findViewById(R.id.rvCourse)
-                rvCourse.adapter = CourseAdapter(lstCourses)
+
+
                 rvCourse.layoutManager = LinearLayoutManager(requireContext())
             }
 
